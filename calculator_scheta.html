@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор счёта</title>
+<style>
+  :root {
+    --bg: #121212;
+    --card: #1e1e1e;
+    --card2: #252525;
+    --text: #f2f2f2;
+    --muted: #a7a7a7;
+    --accent: #7c9cff;
+    --accent-hover: #91abff;
+    --border: #383838;
+    --danger: #ff6b6b;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 32px 16px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: 30px;
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle {
+    margin: 0 0 24px;
+    color: var(--muted);
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 18px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  input {
+    width: 100%;
+    padding: 12px 13px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--card2);
+    color: var(--text);
+    font-size: 16px;
+    outline: none;
+  }
+
+  input:focus {
+    border-color: var(--accent);
+  }
+
+  .section-title {
+    margin: 0 0 14px;
+    font-size: 18px;
+  }
+
+  .order-row {
+    display: grid;
+    grid-template-columns: 1fr 180px 42px;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: end;
+  }
+
+  .remove-btn {
+    height: 44px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--danger);
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .remove-btn:hover {
+    background: rgba(255,107,107,.08);
+  }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+
+  button {
+    border: 0;
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .add-btn {
+    background: var(--card2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .add-btn:hover {
+    background: #303030;
+  }
+
+  .calculate-btn {
+    width: 100%;
+    margin-top: 18px;
+    background: var(--accent);
+    color: #101010;
+    font-size: 17px;
+  }
+
+  .calculate-btn:hover {
+    background: var(--accent-hover);
+  }
+
+  .message {
+    margin-top: 12px;
+    color: var(--danger);
+    font-size: 14px;
+    min-height: 20px;
+  }
+
+  .result {
+    display: none;
+  }
+
+  .result.show {
+    display: block;
+  }
+
+  .summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 13px 10px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+
+  th {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  td:last-child, th:last-child {
+    text-align: right;
+  }
+
+  .total {
+    font-weight: 700;
+    font-size: 17px;
+  }
+
+  .note {
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 650px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .order-row {
+      grid-template-columns: 1fr 130px 42px;
+    }
+
+    .card {
+      padding: 17px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🍽️ Калькулятор счёта</h1>
+  <p class="subtitle">Разделите счёт с учётом чаевых и отдельных заказов.</p>
+
+  <div class="card">
+    <div class="grid">
+      <div>
+        <label for="total">Общая сумма, ₽</label>
+        <input id="total" type="number" min="0" step="0.01" placeholder="Например, 5000">
+      </div>
+
+      <div>
+        <label for="tip">Чаевые, %</label>
+        <input id="tip" type="number" min="0" step="0.1" value="10">
+      </div>
+
+      <div>
+        <label for="people">Количество человек</label>
+        <input id="people" type="number" min="1" step="1" placeholder="Например, 4">
+      </div>
+    </div>
+
+    <div style="margin-top: 26px;">
+      <h2 class="section-title">Отдельные заказы <span style="color:var(--muted);font-weight:400;">(необязательно)</span></h2>
+      <div id="orders"></div>
+
+      <div class="actions">
+        <button class="add-btn" type="button" onclick="addOrder()">＋ Добавить человека</button>
+      </div>
+    </div>
+
+    <button class="calculate-btn" type="button" onclick="calculate()">Посчитать</button>
+    <div id="message" class="message"></div>
+  </div>
+
+  <div id="result" class="card result">
+    <h2 class="section-title">Кто сколько платит</h2>
+
+    <div class="summary">
+      <span id="summaryCommon"></span>
+      <span id="summaryTips"></span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Кто</th>
+          <th>Заказ</th>
+          <th>Чаевые</th>
+          <th>Итого</th>
+        </tr>
+      </thead>
+      <tbody id="resultBody"></tbody>
+      <tfoot>
+        <tr class="total">
+          <td>Итого</td>
+          <td id="totalOrders"></td>
+          <td id="totalTips"></td>
+          <td id="grandTotal"></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="note">
+      Общая сумма счёта делится поровну между всеми людьми. Если у человека есть
+      отдельный заказ, к его доле общей суммы добавляется стоимость этого заказа.
+      Чаевые начисляются и на долю общей суммы, и на отдельный заказ.
+    </div>
+  </div>
+</div>
+
+<script>
+  const ordersEl = document.getElementById('orders');
+
+  function addOrder() {
+    const row = document.createElement('div');
+    row.className = 'order-row';
+    row.innerHTML = `
+      <div>
+        <label>Имя</label>
+        <input class="order-name" type="text" placeholder="Например, Анна">
+      </div>
+      <div>
+        <label>Сумма, ₽</label>
+        <input class="order-amount" type="number" min="0" step="0.01" placeholder="0">
+      </div>
+      <button class="remove-btn" type="button" title="Удалить" onclick="this.closest('.order-row').remove()">×</button>
+    `;
+    ordersEl.appendChild(row);
+  }
+
+  function money(value) {
+    return new Intl.NumberFormat('ru-RU', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(value) + ' ₽';
+  }
+
+  function calculate() {
+    const total = parseFloat(document.getElementById('total').value);
+    const tipPercent = parseFloat(document.getElementById('tip').value);
+    const people = parseInt(document.getElementById('people').value, 10);
+    const message = document.getElementById('message');
+
+    message.textContent = '';
+
+    if (!Number.isFinite(total) || total < 0) {
+      message.textContent = 'Введите корректную общую сумму счёта.';
+      return;
+    }
+
+    if (!Number.isFinite(tipPercent) || tipPercent < 0) {
+      message.textContent = 'Введите корректный процент чаевых.';
+      return;
+    }
+
+    if (!Number.isInteger(people) || people < 1) {
+      message.textContent = 'Введите количество человек (целое число от 1).';
+      return;
+    }
+
+    const rows = [...document.querySelectorAll('.order-row')];
+    const orders = rows.map(row => ({
+      name: row.querySelector('.order-name').value.trim() || 'Без имени',
+      amount: parseFloat(row.querySelector('.order-amount').value)
+    }));
+
+    for (const order of orders) {
+      if (!Number.isFinite(order.amount) || order.amount < 0) {
+        message.textContent = 'Проверьте суммы отдельных заказов.';
+        return;
+      }
+    }
+
+    if (orders.length > people) {
+      message.textContent = 'Отдельных заказов не может быть больше, чем людей.';
+      return;
+    }
+
+    // Общая сумма всегда делится поровну между всеми людьми.
+    // Если у человека есть отдельный заказ, он платит:
+    // своя доля общей суммы + свой отдельный заказ.
+    const commonPerPerson = total / people;
+    const commonTipPerPerson = commonPerPerson * tipPercent / 100;
+
+    const result = [];
+    const namedOrders = new Map();
+
+    orders.forEach((order, index) => {
+      namedOrders.set(index, order);
+    });
+
+    // Сначала добавляем людей с отдельными заказами.
+    orders.forEach((order) => {
+      const orderTip = order.amount * tipPercent / 100;
+      const commonShare = commonPerPerson;
+      const commonShareTip = commonTipPerPerson;
+
+      result.push({
+        name: order.name,
+        order: commonShare + order.amount,
+        tip: commonShareTip + orderTip,
+        total: commonShare + order.amount + commonShareTip + orderTip
+      });
+    });
+
+    // Остальные люди платят только свою долю общей суммы + чаевые с неё.
+    const regularPeople = people - orders.length;
+
+    for (let i = 1; i <= regularPeople; i++) {
+      result.push({
+        name: `Человек ${i}`,
+        order: commonPerPerson,
+        tip: commonTipPerPerson,
+        total: commonPerPerson + commonTipPerPerson
+      });
+    }
+
+    // Корректируем копейки из-за округления, чтобы итоговые суммы совпадали.
+    result.forEach(person => {
+      person.order = Math.round(person.order * 100) / 100;
+      person.tip = Math.round(person.tip * 100) / 100;
+      person.total = Math.round((person.order + person.tip) * 100) / 100;
+    });
+
+    const tbody = document.getElementById('resultBody');
+    tbody.innerHTML = '';
+
+    result.forEach(person => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${escapeHtml(person.name)}</td>
+        <td>${money(person.order)}</td>
+        <td>${money(person.tip)}</td>
+        <td><strong>${money(person.total)}</strong></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    const totalOrders = result.reduce((sum, p) => sum + p.order, 0);
+    const totalTips = result.reduce((sum, p) => sum + p.tip, 0);
+    const grandTotal = result.reduce((sum, p) => sum + p.total, 0);
+
+    document.getElementById('totalOrders').textContent = money(totalOrders);
+    document.getElementById('totalTips').textContent = money(totalTips);
+    document.getElementById('grandTotal').textContent = money(grandTotal);
+
+    document.getElementById('summaryCommon').textContent =
+      `Общая сумма делится на ${people}: ${money(commonPerPerson)} на человека`;
+
+    document.getElementById('summaryTips').textContent =
+      `Чаевые: ${tipPercent}%`;
+
+    document.getElementById('result').classList.add('show');
+  }
+
+  function escapeHtml(value) {
+    return value.replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    }[char]));
+  }
+</script>
+
+</body>
+</html>

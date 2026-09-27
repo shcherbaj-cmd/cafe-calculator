@@ -30,21 +30,11 @@
     padding: 32px 16px;
   }
 
-  .container {
-    width: 100%;
-    max-width: 760px;
-  }
+  .container { width: 100%; max-width: 780px; }
 
-  h1 {
-    margin: 0 0 8px;
-    font-size: 30px;
-    letter-spacing: -0.5px;
-  }
+  h1 { margin: 0 0 8px; font-size: 30px; letter-spacing: -0.5px; }
 
-  .subtitle {
-    margin: 0 0 24px;
-    color: var(--muted);
-  }
+  .subtitle { margin: 0 0 24px; color: var(--muted); line-height: 1.5; }
 
   .card {
     background: var(--card);
@@ -56,20 +46,16 @@
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1.25fr 1fr 1fr;
     gap: 14px;
   }
 
-  label {
-    display: block;
-    margin-bottom: 7px;
-    font-size: 14px;
-    color: var(--muted);
-  }
+  label { display: block; margin-bottom: 7px; font-size: 14px; color: var(--muted); }
 
-  input {
+  input, select {
     width: 100%;
-    padding: 12px 13px;
+    height: 44px;
+    padding: 10px 13px;
     border: 1px solid var(--border);
     border-radius: 10px;
     background: var(--card2);
@@ -78,24 +64,13 @@
     outline: none;
   }
 
-  input:focus {
-    border-color: var(--accent);
-  }
+  input:focus, select:focus { border-color: var(--accent); }
 
-  .section-title {
-    margin: 0 0 14px;
-    font-size: 18px;
-  }
+  .amount-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
 
-  .order-row {
-    display: grid;
-    grid-template-columns: 1fr 180px 42px;
-    gap: 10px;
-    margin-bottom: 10px;
-    align-items: end;
-  }
+  .amount-row { display: grid; grid-template-columns: 1fr 42px; gap: 10px; }
 
-  .remove-btn {
+  .remove-total-btn, .remove-btn {
     height: 44px;
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -105,16 +80,36 @@
     cursor: pointer;
   }
 
-  .remove-btn:hover {
-    background: rgba(255,107,107,.08);
+  .remove-total-btn:hover, .remove-btn:hover { background: rgba(255,107,107,.08); }
+
+  .sum-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--card2);
+    color: var(--muted);
+    font-size: 14px;
   }
 
-  .actions {
-    display: flex;
+  .sum-line strong { color: var(--text); font-size: 17px; white-space: nowrap; }
+
+  .tip-control { display: grid; grid-template-columns: 1fr 82px; gap: 8px; }
+
+  .section-title { margin: 0 0 14px; font-size: 18px; }
+
+  .order-row {
+    display: grid;
+    grid-template-columns: 1fr 150px 155px 42px;
     gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 14px;
+    margin-bottom: 10px;
+    align-items: end;
   }
+
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
 
   button {
     border: 0;
@@ -125,15 +120,8 @@
     cursor: pointer;
   }
 
-  .add-btn {
-    background: var(--card2);
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
-
-  .add-btn:hover {
-    background: #303030;
-  }
+  .add-btn { background: var(--card2); color: var(--text); border: 1px solid var(--border); }
+  .add-btn:hover { background: #303030; }
 
   .calculate-btn {
     width: 100%;
@@ -143,24 +131,12 @@
     font-size: 17px;
   }
 
-  .calculate-btn:hover {
-    background: var(--accent-hover);
-  }
+  .calculate-btn:hover { background: var(--accent-hover); }
 
-  .message {
-    margin-top: 12px;
-    color: var(--danger);
-    font-size: 14px;
-    min-height: 20px;
-  }
+  .message { margin-top: 12px; color: var(--danger); font-size: 14px; min-height: 20px; }
 
-  .result {
-    display: none;
-  }
-
-  .result.show {
-    display: block;
-  }
+  .result { display: none; }
+  .result.show { display: block; }
 
   .summary {
     display: flex;
@@ -172,70 +148,54 @@
     font-size: 14px;
   }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 13px 10px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+  th { color: var(--muted); font-size: 13px; font-weight: 500; }
+  td:last-child, th:last-child { text-align: right; }
+  .total { font-weight: 700; font-size: 17px; }
+
+  .note { margin-top: 14px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+  .small-note { margin-top: 7px; color: var(--muted); font-size: 12px; line-height: 1.4; }
+
+  @media (max-width: 700px) {
+    .grid { grid-template-columns: 1fr; }
+    .order-row { grid-template-columns: 1fr 130px 42px; }
   }
 
-  th, td {
-    padding: 13px 10px;
-    border-bottom: 1px solid var(--border);
-    text-align: left;
-  }
-
-  th {
-    color: var(--muted);
-    font-size: 13px;
-    font-weight: 500;
-  }
-
-  td:last-child, th:last-child {
-    text-align: right;
-  }
-
-  .total {
-    font-weight: 700;
-    font-size: 17px;
-  }
-
-  .note {
-    margin-top: 14px;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.5;
-  }
-
-  @media (max-width: 650px) {
-    .grid {
-      grid-template-columns: 1fr;
-    }
-
-    .order-row {
-      grid-template-columns: 1fr 130px 42px;
-    }
-
-    .card {
-      padding: 17px;
-    }
+  @media (max-width: 470px) {
+    body { padding: 18px 10px; }
+    .card { padding: 17px; }
+    h1 { font-size: 26px; }
+    .tip-control { grid-template-columns: 1fr 76px; }
+    table { font-size: 13px; }
+    th, td { padding: 10px 6px; }
   }
 </style>
 </head>
 <body>
-
 <div class="container">
   <h1>🍽️ Калькулятор счёта</h1>
-  <p class="subtitle">Разделите счёт с учётом чаевых и отдельных заказов.</p>
+  <p class="subtitle">Добавляйте несколько сумм счёта, разделяйте их между всеми и учитывайте отдельные заказы.</p>
 
   <div class="card">
     <div class="grid">
       <div>
-        <label for="total">Общая сумма, ₽</label>
-        <input id="total" type="number" min="0" step="0.01" placeholder="Например, 5000">
+        <label>Сумма счёта</label>
+        <div id="totals" class="amount-list"></div>
+        <button class="add-btn" type="button" onclick="addTotalAmount()">＋ Добавить сумму</button>
+        <div class="sum-line"><span>Общая сумма</span><strong id="totalSumPreview">0,00 Br</strong></div>
       </div>
 
       <div>
-        <label for="tip">Чаевые, %</label>
-        <input id="tip" type="number" min="0" step="0.1" value="10">
+        <label for="tip">Чаевые</label>
+        <div class="tip-control">
+          <input id="tip" type="number" min="0" step="0.01" value="10">
+          <select id="tipType">
+            <option value="percent">%</option>
+            <option value="fixed">Br</option>
+          </select>
+        </div>
+        <div class="small-note">% — процент от суммы, Br — фиксированная сумма чаевых.</div>
       </div>
 
       <div>
@@ -244,13 +204,10 @@
       </div>
     </div>
 
-    <div style="margin-top: 26px;">
-      <h2 class="section-title">Отдельные заказы <span style="color:var(--muted);font-weight:400;">(необязательно)</span></h2>
+    <div style="margin-top:26px">
+      <h2 class="section-title">Отдельные заказы <span style="color:var(--muted);font-weight:400">(необязательно)</span></h2>
       <div id="orders"></div>
-
-      <div class="actions">
-        <button class="add-btn" type="button" onclick="addOrder()">＋ Добавить человека</button>
-      </div>
+      <div class="actions"><button class="add-btn" type="button" onclick="addOrder()">＋ Добавить человека</button></div>
     </div>
 
     <button class="calculate-btn" type="button" onclick="calculate()">Посчитать</button>
@@ -259,183 +216,39 @@
 
   <div id="result" class="card result">
     <h2 class="section-title">Кто сколько платит</h2>
-
-    <div class="summary">
-      <span id="summaryCommon"></span>
-      <span id="summaryTips"></span>
-    </div>
-
+    <div class="summary"><span id="summaryCommon"></span><span id="summaryTips"></span></div>
     <table>
-      <thead>
-        <tr>
-          <th>Кто</th>
-          <th>Заказ</th>
-          <th>Чаевые</th>
-          <th>Итого</th>
-        </tr>
-      </thead>
+      <thead><tr><th>Кто</th><th>Счёт</th><th>Чаевые</th><th>Итого</th></tr></thead>
       <tbody id="resultBody"></tbody>
-      <tfoot>
-        <tr class="total">
-          <td>Итого</td>
-          <td id="totalOrders"></td>
-          <td id="totalTips"></td>
-          <td id="grandTotal"></td>
-        </tr>
-      </tfoot>
+      <tfoot><tr class="total"><td>Итого</td><td id="totalOrders"></td><td id="totalTips"></td><td id="grandTotal"></td></tr></tfoot>
     </table>
-
     <div class="note">
-      Общая сумма счёта делится поровну между всеми людьми. Если у человека есть
-      отдельный заказ, к его доле общей суммы добавляется стоимость этого заказа.
-      Чаевые начисляются и на долю общей суммы, и на отдельный заказ.
+      Общая сумма счёта делится поровну между всеми людьми. Если у человека есть отдельный заказ,
+      к его доле общей суммы добавляется стоимость этого заказа. При выборе «%» чаевые рассчитываются
+      по проценту от суммы каждого человека. При выборе «Br» введённая фиксированная сумма чаевых
+      распределяется пропорционально суммам, которые платят люди до чаевых.
     </div>
   </div>
 </div>
 
 <script>
-  const ordersEl = document.getElementById('orders');
-
-  function addOrder() {
-    const row = document.createElement('div');
-    row.className = 'order-row';
-    row.innerHTML = `
-      <div>
-        <label>Имя</label>
-        <input class="order-name" type="text" placeholder="Например, Анна">
-      </div>
-      <div>
-        <label>Сумма, ₽</label>
-        <input class="order-amount" type="number" min="0" step="0.01" placeholder="0">
-      </div>
-      <button class="remove-btn" type="button" title="Удалить" onclick="this.closest('.order-row').remove()">×</button>
-    `;
-    ordersEl.appendChild(row);
-  }
+  const totalsEl = document.getElementById('totals');
 
   function money(value) {
     return new Intl.NumberFormat('ru-RU', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
-    }).format(value) + ' ₽';
+    }).format(value) + ' Br';
   }
 
-  function calculate() {
-    const total = parseFloat(document.getElementById('total').value);
-    const tipPercent = parseFloat(document.getElementById('tip').value);
-    const people = parseInt(document.getElementById('people').value, 10);
-    const message = document.getElementById('message');
+  function formatNumber(value) {
+    return new Intl.NumberFormat('ru-RU', {
+      maximumFractionDigits: 2
+    }).format(value);
+  }
 
-    message.textContent = '';
-
-    if (!Number.isFinite(total) || total < 0) {
-      message.textContent = 'Введите корректную общую сумму счёта.';
-      return;
-    }
-
-    if (!Number.isFinite(tipPercent) || tipPercent < 0) {
-      message.textContent = 'Введите корректный процент чаевых.';
-      return;
-    }
-
-    if (!Number.isInteger(people) || people < 1) {
-      message.textContent = 'Введите количество человек (целое число от 1).';
-      return;
-    }
-
-    const rows = [...document.querySelectorAll('.order-row')];
-    const orders = rows.map(row => ({
-      name: row.querySelector('.order-name').value.trim() || 'Без имени',
-      amount: parseFloat(row.querySelector('.order-amount').value)
-    }));
-
-    for (const order of orders) {
-      if (!Number.isFinite(order.amount) || order.amount < 0) {
-        message.textContent = 'Проверьте суммы отдельных заказов.';
-        return;
-      }
-    }
-
-    if (orders.length > people) {
-      message.textContent = 'Отдельных заказов не может быть больше, чем людей.';
-      return;
-    }
-
-    // Общая сумма всегда делится поровну между всеми людьми.
-    // Если у человека есть отдельный заказ, он платит:
-    // своя доля общей суммы + свой отдельный заказ.
-    const commonPerPerson = total / people;
-    const commonTipPerPerson = commonPerPerson * tipPercent / 100;
-
-    const result = [];
-    const namedOrders = new Map();
-
-    orders.forEach((order, index) => {
-      namedOrders.set(index, order);
-    });
-
-    // Сначала добавляем людей с отдельными заказами.
-    orders.forEach((order) => {
-      const orderTip = order.amount * tipPercent / 100;
-      const commonShare = commonPerPerson;
-      const commonShareTip = commonTipPerPerson;
-
-      result.push({
-        name: order.name,
-        order: commonShare + order.amount,
-        tip: commonShareTip + orderTip,
-        total: commonShare + order.amount + commonShareTip + orderTip
-      });
-    });
-
-    // Остальные люди платят только свою долю общей суммы + чаевые с неё.
-    const regularPeople = people - orders.length;
-
-    for (let i = 1; i <= regularPeople; i++) {
-      result.push({
-        name: `Человек ${i}`,
-        order: commonPerPerson,
-        tip: commonTipPerPerson,
-        total: commonPerPerson + commonTipPerPerson
-      });
-    }
-
-    // Корректируем копейки из-за округления, чтобы итоговые суммы совпадали.
-    result.forEach(person => {
-      person.order = Math.round(person.order * 100) / 100;
-      person.tip = Math.round(person.tip * 100) / 100;
-      person.total = Math.round((person.order + person.tip) * 100) / 100;
-    });
-
-    const tbody = document.getElementById('resultBody');
-    tbody.innerHTML = '';
-
-    result.forEach(person => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${escapeHtml(person.name)}</td>
-        <td>${money(person.order)}</td>
-        <td>${money(person.tip)}</td>
-        <td><strong>${money(person.total)}</strong></td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    const totalOrders = result.reduce((sum, p) => sum + p.order, 0);
-    const totalTips = result.reduce((sum, p) => sum + p.tip, 0);
-    const grandTotal = result.reduce((sum, p) => sum + p.total, 0);
-
-    document.getElementById('totalOrders').textContent = money(totalOrders);
-    document.getElementById('totalTips').textContent = money(totalTips);
-    document.getElementById('grandTotal').textContent = money(grandTotal);
-
-    document.getElementById('summaryCommon').textContent =
-      `Общая сумма делится на ${people}: ${money(commonPerPerson)} на человека`;
-
-    document.getElementById('summaryTips').textContent =
-      `Чаевые: ${tipPercent}%`;
-
-    document.getElementById('result').classList.add('show');
+  function round2(value) {
+    return Math.round((value + Number.EPSILON) * 100) / 100;
   }
 
   function escapeHtml(value) {
@@ -447,7 +260,284 @@
       "'": '&#039;'
     }[char]));
   }
-</script>
 
+  function addTotalAmount(value = '') {
+    const row = document.createElement('div');
+    row.className = 'amount-row';
+    row.innerHTML = `
+      <input class="total-amount" type="number" min="0" step="0.01"
+             placeholder="Например, 2500" value="${escapeHtml(String(value))}"
+             oninput="updateTotalPreview()">
+      <button class="remove-total-btn" type="button" title="Удалить"
+              onclick="removeTotalAmount(this)">×</button>
+    `;
+    totalsEl.appendChild(row);
+    updateTotalPreview();
+  }
+
+  function removeTotalAmount(button) {
+    const rows = document.querySelectorAll('.amount-row');
+    if (rows.length === 1) {
+      rows[0].querySelector('.total-amount').value = '';
+    } else {
+      button.closest('.amount-row').remove();
+    }
+    updateTotalPreview();
+  }
+
+  function updateTotalPreview() {
+    const sum = [...document.querySelectorAll('.total-amount')].reduce((total, input) => {
+      const value = parseFloat(input.value);
+      return total + (Number.isFinite(value) && value >= 0 ? value : 0);
+    }, 0);
+    document.getElementById('totalSumPreview').textContent = money(sum);
+  }
+
+  function addOrder() {
+    const row = document.createElement('div');
+    row.className = 'order-row';
+
+    row.innerHTML = `
+      <div class="person-order-wrap">
+        <label>Имя</label>
+        <input class="order-name" type="text" placeholder="Например, Анна">
+
+        <label style="margin-top:4px;">Суммы отдельного заказа</label>
+        <div class="person-amounts"></div>
+
+        <button
+          class="add-btn add-person-amount"
+          type="button"
+          onclick="addPersonAmount(this)"
+        >＋ Добавить сумму</button>
+
+        <div class="person-total">
+          <span>Итого за заказ</span>
+          <strong class="person-order-total">0,00 Br</strong>
+        </div>
+      </div>
+
+      <div>
+        <label>Чаевые</label>
+        <div class="tip-control">
+          <input class="order-tip" type="number" min="0" step="0.01" value="10">
+          <select class="order-tip-type">
+            <option value="percent">%</option>
+            <option value="fixed">Br</option>
+          </select>
+        </div>
+      </div>
+
+      <button
+        class="remove-btn"
+        type="button"
+        title="Удалить человека"
+        onclick="this.closest('.order-row').remove()"
+      >×</button>
+    `;
+
+    document.getElementById('orders').appendChild(row);
+
+    const amountList = row.querySelector('.person-amounts');
+    addPersonAmountToList(amountList);
+
+    const firstInput = row.querySelector('.total-person-amount');
+    firstInput.addEventListener('input', () => updatePersonOrderTotal(row));
+    updatePersonOrderTotal(row);
+  }
+
+  function addPersonAmount(button) {
+    const row = button.closest('.order-row');
+    const amountList = row.querySelector('.person-amounts');
+    addPersonAmountToList(amountList);
+    updatePersonOrderTotal(row);
+  }
+
+  function addPersonAmountToList(list, value = '') {
+    const amountRow = document.createElement('div');
+    amountRow.className = 'person-amount-row';
+
+    amountRow.innerHTML = `
+      <input
+        class="total-person-amount"
+        type="number"
+        min="0"
+        step="0.01"
+        placeholder="Сумма, Br"
+        value="${escapeHtml(String(value))}"
+      >
+      <button
+        class="remove-total-btn"
+        style="height:44px;width:34px;padding:0;font-size:18px;"
+        type="button"
+        title="Удалить сумму"
+        onclick="removePersonAmount(this)"
+      >×</button>
+    `;
+
+    list.appendChild(amountRow);
+
+    const input = amountRow.querySelector('.total-person-amount');
+    input.addEventListener('input', () => {
+      updatePersonOrderTotal(list.closest('.order-row'));
+    });
+  }
+
+  function removePersonAmount(button) {
+    const row = button.closest('.order-row');
+    const list = row.querySelector('.person-amounts');
+    const amountRows = list.querySelectorAll('.person-amount-row');
+
+    if (amountRows.length === 1) {
+      amountRows[0].querySelector('.total-person-amount').value = '';
+    } else {
+      button.closest('.person-amount-row').remove();
+    }
+
+    updatePersonOrderTotal(row);
+  }
+
+  function getPersonOrderAmount(row) {
+    return [...row.querySelectorAll('.total-person-amount')].reduce((sum, input) => {
+      const value = parseFloat(input.value);
+      return sum + (Number.isFinite(value) && value >= 0 ? value : 0);
+    }, 0);
+  }
+
+  function updatePersonOrderTotal(row) {
+    if (!row) return;
+    const totalEl = row.querySelector('.person-order-total');
+    if (totalEl) totalEl.textContent = money(getPersonOrderAmount(row));
+  }
+
+  function showError(message) {
+    document.getElementById('message').textContent = message;
+    document.getElementById('result').classList.remove('show');
+  }
+
+  function calculate() {
+    document.getElementById('message').textContent = '';
+
+    const amountInputs = [...document.querySelectorAll('.total-amount')];
+    const amounts = amountInputs.map(input => parseFloat(input.value));
+
+    if (amounts.length === 0 || amounts.every(value => !Number.isFinite(value) || value === 0)) {
+      showError('Введите хотя бы одну сумму счёта.');
+      return;
+    }
+
+    if (amounts.some(value => !Number.isFinite(value) || value < 0)) {
+      showError('Проверьте суммы счёта. Все значения должны быть числами от 0.');
+      return;
+    }
+
+    const total = amounts.reduce((sum, value) => sum + value, 0);
+    const tipValue = parseFloat(document.getElementById('tip').value);
+    const tipType = document.getElementById('tipType').value;
+    const people = parseInt(document.getElementById('people').value, 10);
+
+    if (!Number.isFinite(tipValue) || tipValue < 0) {
+      showError('Введите корректное значение чаевых.');
+      return;
+    }
+
+    if (!Number.isInteger(people) || people < 1) {
+      showError('Введите количество человек — целое число от 1.');
+      return;
+    }
+
+    const orderRows = [...document.querySelectorAll('.order-row')];
+    const orders = orderRows.map(row => ({
+      name: row.querySelector('.order-name').value.trim() || 'Без имени',
+      amount: getPersonOrderAmount(row),
+      tipValue: parseFloat(row.querySelector('.order-tip').value),
+      tipType: row.querySelector('.order-tip-type').value
+    }));
+
+    if (orders.some(order => !Number.isFinite(order.amount) || order.amount < 0)) {
+      showError('Проверьте суммы отдельных заказов.');
+      return;
+    }
+
+    if (orders.some(order => !Number.isFinite(order.tipValue) || order.tipValue < 0)) {
+      showError('Проверьте значения чаевых в отдельных заказах.');
+      return;
+    }
+
+    if (orders.length > people) {
+      showError('Отдельных заказов не может быть больше, чем людей.');
+      return;
+    }
+
+    // Общая сумма делится поровну между всеми.
+    const commonPerPerson = total / people;
+
+    // Верхнее поле чаевых относится только к общей доле счёта каждого человека.
+    // Для фиксированной суммы общих чаевых сумма распределяется поровну.
+    const commonTipPerPerson = tipType === 'percent'
+      ? commonPerPerson * tipValue / 100
+      : tipValue / people;
+
+    const result = [];
+
+    // Для каждого отдельного заказа используются его собственные чаевые.
+    orders.forEach(order => {
+      const separateTip = order.tipType === 'percent'
+        ? order.amount * order.tipValue / 100
+        : order.tipValue;
+
+      result.push({
+        name: order.name,
+        baseAmount: commonPerPerson + order.amount,
+        tip: commonTipPerPerson + separateTip
+      });
+    });
+
+    // Остальные люди платят только свою долю общей суммы и общие чаевые.
+    for (let i = 1; i <= people - orders.length; i++) {
+      result.push({
+        name: `Человек ${i}`,
+        baseAmount: commonPerPerson,
+        tip: commonTipPerPerson
+      });
+    }
+
+    result.forEach(person => {
+      person.baseAmount = round2(person.baseAmount);
+      person.tip = round2(person.tip);
+      person.total = round2(person.baseAmount + person.tip);
+    });
+
+    const tbody = document.getElementById('resultBody');
+    tbody.innerHTML = '';
+
+    result.forEach(person => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${escapeHtml(person.name)}</td>
+        <td>${money(person.baseAmount)}</td>
+        <td>${money(person.tip)}</td>
+        <td><strong>${money(person.total)}</strong></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    const totalBase = round2(result.reduce((sum, person) => sum + person.baseAmount, 0));
+    const totalTips = round2(result.reduce((sum, person) => sum + person.tip, 0));
+    const grandTotal = round2(result.reduce((sum, person) => sum + person.total, 0));
+
+    document.getElementById('totalOrders').textContent = money(totalBase);
+    document.getElementById('totalTips').textContent = money(totalTips);
+    document.getElementById('grandTotal').textContent = money(grandTotal);
+    document.getElementById('summaryCommon').textContent = `Общая сумма: ${money(total)} · ${people} чел.`;
+    document.getElementById('summaryTips').textContent = tipType === 'percent'
+      ? `Чаевые: ${formatNumber(tipValue)}%`
+      : `Фиксированные чаевые: ${money(tipValue)}`;
+
+    document.getElementById('result').classList.add('show');
+  }
+
+  addTotalAmount();
+</script>
 </body>
 </html>
